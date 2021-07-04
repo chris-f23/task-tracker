@@ -33,17 +33,28 @@ export default {
       showAddTaskForm: false
     }
   },
-  created () {
-    this.tasks = [
-      new Task(1, 'Comprar mercadería', new Date(), false),
-      new Task(2, 'Sacar la basura', new Date(2021, 7, 3, 12, 30), false),
-      new Task(3, 'Regar las plantas del jardín', new Date(2021, 7, 3, 16, 22), false),
-      new Task(4, 'Pasear al perro', new Date(2021, 7, 1, 21, 20), true)
-    ]
+  async created () {
+    this.tasks = await this.fetchTasks();
+    this.tasks.reverse();
   },
   methods: {
-    addTask(newTask) {
-      this.tasks = [newTask, ...this.tasks];
+    async addTask(newTask) {
+      const res = await fetch('api/tasks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newTask)
+      });
+
+      if (res.status !== 200) {
+        alert("No se pudo realizar la operación.")
+        return;
+      }
+
+      const data = await res.json();
+
+      this.tasks = [data, ...this.tasks];
       this.toggleAddTaskForm();
     },
 
@@ -51,34 +62,66 @@ export default {
       this.showAddTaskForm = !this.showAddTaskForm;
     },
 
-    archiveTask(id) {
+    async archiveTask(id) {
       if (confirm("Estás seguro de querer borrar esta tarea?")) {
-        this.tasks = this.tasks.filter(tarea => tarea.id != id)
+        const res = await fetch(`api/tasks/${id}`, { method: 'DELETE' });
+        
+        if (res.status === 200) {
+          this.tasks = this.tasks.filter(tarea => tarea.id != id);
+        } else {
+          alert("Ocurrio un error al intentar eliminar la tarea.");
+        }
       }
     },
 
-    toggleReminder(id) {
-        this.tasks = this.tasks.map(tarea =>{
-          if (tarea.id === id) {
-            tarea.recordatorio = !tarea.recordatorio;
-            return tarea;
-            // return { ...tarea, recordatorio: !tarea.recordatorio };
-          } else {
-            return tarea;
-          }
-        });
+    async toggleReminder(id) {
+      const taskToToggle = await this.fetchTask(id);
+      const updateTask = { ...taskToToggle, recordatorio: !taskToToggle.recordatorio }
+
+      const res = await fetch(`api/tasks/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateTask)
+
+      });
+
+      if (res.status !== 200) {
+        alert("No se pudo realizar la operación.")
+        return;
+      }
+
+      const data = await res.json();
+
+      this.tasks = this.tasks.map(tarea =>{
+        if (tarea.id === id) {
+          tarea.recordatorio = data.recordatorio;
+          return tarea;
+        } else {
+          return tarea;
+        }
+      });
+    },
+
+    async fetchTasks() {
+      const res = await fetch("api/tasks");
+
+      if (res.status !== 200) {
+        alert("No se pudo obtener las tareas.")
+        return [];
+      }
+
+      return res.json();
+    },
+
+    async fetchTask(id) {
+      const res = await fetch(`api/tasks/${id}`);
+      return res.json();
     }
   }
 }
 
-class Task {
-  constructor(id, texto, fecha, recordatorio) {
-    this.id = id;
-    this.texto = texto;
-    this.fecha = fecha.toLocaleString();
-    this.recordatorio = recordatorio;
-  }
-}
 </script>
 
 <style>

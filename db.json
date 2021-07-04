@@ -1,0 +1,28 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "texto": "Comprar mercadería",
+      "fecha": "30/7/2021",
+      "recordatorio": true
+    },
+    {
+      "id": 2,
+      "texto": "Sacar la basura",
+      "fecha": "30/7/2021",
+      "recordatorio": true
+    },
+    {
+      "id": 3,
+      "texto": "Regar las plantas del jardín",
+      "fecha": "30/7/2021",
+      "recordatorio": false
+    },
+    {
+      "id": 4,
+      "texto": "Pasear al perro",
+      "fecha": "30/7/2021",
+      "recordatorio": false
+    }
+  ]
+}

@@ -52,7 +52,7 @@ export default {
       }
 
       const newTask = {
-        id: Math.floor(Math.random() * 10000),
+        // id: Math.floor(Math.random() * 10000),
         texto: this.texto,
         fecha: this.fecha,
         recordatorio: this.recordatorio
