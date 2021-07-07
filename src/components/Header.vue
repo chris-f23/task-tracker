@@ -5,9 +5,11 @@
       </div>
       <div class="col">
         <Button class="float-end"
+          v-show="homePage"
           :texto="showAddTaskForm ? 'Cerrar' : 'Nueva Tarea'"
           :color="showAddTaskForm ? 'danger' : 'primary'"
-          @btn-click="$emit('toggle-add-task-form')"/>
+          @btn-click="$emit('toggle-add-task-form')"
+        />
       </div>
     </div>
 </template>
@@ -19,6 +21,14 @@ export default {
   name: 'Header',
   props: {
     showAddTaskForm: Boolean
+  },
+  computed: {
+    homePage() {
+      if (this.$route.path === "/") {
+        return true;
+      }
+      return false;
+    }
   },
   components: {
     Button

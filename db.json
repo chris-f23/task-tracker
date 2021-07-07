@@ -4,7 +4,7 @@
       "id": 1,
       "texto": "Comprar mercadería",
       "fecha": "30/7/2021",
-      "recordatorio": true
+      "recordatorio": false
     },
     {
       "id": 2,
@@ -16,13 +16,19 @@
       "id": 3,
       "texto": "Regar las plantas del jardín",
       "fecha": "30/7/2021",
-      "recordatorio": false
+      "recordatorio": true
     },
     {
       "id": 4,
       "texto": "Pasear al perro",
       "fecha": "30/7/2021",
       "recordatorio": false
+    },
+    {
+      "texto": "Cocinar el almuerzo",
+      "fecha": "2021-07-02T22:18",
+      "recordatorio": false,
+      "id": 5
     }
   ]
 }
